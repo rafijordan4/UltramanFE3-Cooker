@@ -25,13 +25,13 @@ val keystoreProperties = rootProject.file("keystore.properties").takeIf { it.isF
 android {
     namespace = "com.kira3.ametrine"
     compileSdk {
-        version = release(37)
+        version = release(36)
     }
 
     defaultConfig {
         applicationId = "com.rafi.ultramanfe3"
         minSdk = 29
-        targetSdk = 37
+        targetSdk = 36
         versionCode = 1
         versionName = "0.2.0-engine"
 

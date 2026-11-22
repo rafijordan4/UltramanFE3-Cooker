@@ -41,13 +41,13 @@ jobs:
           "$SDKMANAGER" --version
 
           echo "=== API 37 PACKAGE AVAILABILITY ==="
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --channel=3 --list |
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --list |
             grep -E "platforms;android-37|build-tools;37|ndk;28.2|cmake;3.31" || true
 
           echo "=== END SDK PACKAGE CHECK ==="
           echo "Accepting SDK licenses using channel 3..."
           set +o pipefail
-          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --channel=3 --licenses
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses
           LICENSE_STATUS=${PIPESTATUS[1]}
           set -o pipefail
           test "$LICENSE_STATUS" -eq 0 || {
@@ -55,10 +55,10 @@ jobs:
             exit 1
           }
 
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --channel=3 --install \
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install \
             "platform-tools" \
-            "platforms;android-37" \
-            "build-tools;37.0.0" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
             "ndk;29.0.14206865" \
             "cmake;3.31.6"
 
