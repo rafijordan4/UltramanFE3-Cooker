@@ -25,7 +25,7 @@ val keystoreProperties = rootProject.file("keystore.properties").takeIf { it.isF
 android {
     namespace = "com.kira3.ametrine"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
