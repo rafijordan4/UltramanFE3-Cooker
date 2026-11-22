@@ -1,63 +1,37 @@
-# Ametrine
+# Ultraman FE3 Cooker — PS2 Engine build
 
-A PS2 emulator for Android. The emulation core is [ARMSX2](https://github.com/ARMSX2/ARMSX2),
-an ARM64 fork of [PCSX2](https://github.com/PCSX2/pcsx2); the app around it (library, settings,
-touch controls) is written from scratch in Jetpack Compose.
+This branch uses Ametrine as the Android PS2 emulator application and ARMSX2 as its ARM64 emulation core. The APK is a single application (`com.rafi.ultramanfe3`), not a separate launcher plus emulator.
 
-> Ametrine is an unofficial project. It is not affiliated with Sony Interactive Entertainment,
-> PCSX2 or ARMSX2. Please report problems with Ametrine here, not to the ARMSX2 or PCSX2 teams.
+## Build requirements
 
-## Features
+- Android 10+ (API 29+), `arm64-v8a`
+- Device with 4 KB memory pages; 16 KB page devices are not supported by this Ametrine build yet
+- JDK 17
+- Gradle wrapper 9.6.0
+- Android SDK platform 37
+- NDK 29.0.14206865
+- CMake 3.31.6
+- Python 3 and Git
 
-- Game library from a folder you pick, with favorites, search and play time
-- Global settings with per-game overrides
-- Touch controls you can rearrange and resize, and physical controllers
-- Save states, memory card manager, cheats, input macros
-- Backup and restore of settings and saves
-- Custom Vulkan drivers (adrenotools) on Adreno GPUs
-- Optional: ask Google Gemini about the current screen
-
-## Requirements
-
-- Android 10 or later, arm64-v8a
-- A device with 4 KB memory pages (16 KB page devices are not supported yet)
-- **A BIOS dumped from your own PS2.** Ametrine does not include, download or link to any
-  BIOS or games. Use only games you own.
-
-## Download
-
-APKs are on the [Releases](https://github.com/kiraponz/Ametrine/releases) page. Each release
-also carries the complete source it was built from.
-
-## Privacy
-
-Ametrine has no analytics and makes no network requests on its own. The one exception is the
-optional Gemini feature: when you use it, the screenshot and your question are sent to Google's
-Gemini API with your own API key, under [Google's terms](https://ai.google.dev/gemini-api/terms).
-
-## Building
-
-Requires Android Studio (for its JDK), NDK 29.0.14206865, CMake 3.31.6, Python 3 and git.
+## Build
 
 ```bash
-git clone --recurse-submodules https://github.com/kiraponz/Ametrine.git
-cd Ametrine
+git clone --recurse-submodules https://github.com/rafijordan4/UltramanFE3-Cooker.git
+cd UltramanFE3-Cooker
+git checkout engine-integration
 ./scripts/setup-armsx2.sh
 ./gradlew :app:assembleDebug
 ```
 
-`setup-armsx2.sh` checks out the ARMSX2 submodule, fetches shaderc's dependencies and applies the
-patches in `patches/armsx2/`. It is safe to run again. From the command line, point `JAVA_HOME`
-at Android Studio's JDK (on macOS,
-`/Applications/Android Studio.app/Contents/jbr/Contents/Home`).
+GitHub Actions installs the pinned SDK/NDK/CMake versions, prepares the ARMSX2 submodule and uploads the debug APK as an artifact.
 
-The submodule points at [a fork of ARMSX2](https://github.com/kiraponz/ARMSX2) so that the commit
-a release is built from stays available.
+## BIOS, games and saves
 
-## License
+No PS2 BIOS or commercial game image is included. Import a BIOS dumped from a PS2 you own and game images you are entitled to use through the app. Use the app's memory-card manager to import/manage save data.
 
-Ametrine is free software under the [GNU General Public License v3.0](LICENSE) or later, the
-same license as ARMSX2 and PCSX2. The third-party libraries, fonts and data the app includes are
-listed with their licenses in the app, under Settings > About > Open source licenses.
+## Upstream and licenses
 
-PlayStation and PS2 are trademarks of Sony Interactive Entertainment Inc.
+This branch is based on Ametrine and its ARMSX2/PCSX2-derived emulation core. Ametrine and ARMSX2 are GPL-3.0-or-later. Keep the upstream license notices and corresponding source available when distributing modified builds. Third-party notices are available in the upstream source and in the app's Open Source Licenses screen.
+
+- Ametrine: https://github.com/kiraponz/Ametrine
+- ARMSX2: https://github.com/kitakatashima/ARMSX2

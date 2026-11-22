@@ -29,11 +29,12 @@ android {
     }
 
     defaultConfig {
+        applicationId = "com.rafi.ultramanfe3"
         applicationId = "com.kira3.ametrine"
         minSdk = 29
         targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.2.0-engine"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "CORE_COMMIT", "\"$coreCommit\"")
