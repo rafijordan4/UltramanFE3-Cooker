@@ -25,14 +25,29 @@ jobs:
       - name: Install Android SDK packages
         shell: bash
         run: |
-          SDKMANAGER="$(command -v sdkmanager)"
-          echo "Using: $SDKMANAGER"
-          yes | "$SDKMANAGER" --licenses || true
-          "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          set -e
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+
+          if [ -z "$SDKMANAGER" ]; then
+            echo "ERROR: sdkmanager tidak ditemukan"
+            find "$SDK_ROOT" -maxdepth 4 -type f -name sdkmanager
+            exit 1
+          fi
+
+          echo "SDK Root: $SDK_ROOT"
+          echo "SDK Manager: $SDKMANAGER"
+
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses || true
+
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
 
       - name: Build debug APK
         run: |
-          chmod +x ./gradlew
+          chmod +x gradlew
           ./gradlew --no-daemon assembleDebug
 
       - name: Upload APK
