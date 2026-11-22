@@ -30,7 +30,6 @@ android {
 
     defaultConfig {
         applicationId = "com.rafi.ultramanfe3"
-        applicationId = "com.kira3.ametrine"
         minSdk = 29
         targetSdk = 37
         versionCode = 1

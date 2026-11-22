@@ -28,16 +28,31 @@ jobs:
         run: |
           set -euo pipefail
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          export ANDROID_HOME="$SDK_ROOT"
+          export ANDROID_SDK_ROOT="$SDK_ROOT"
+
           SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
-          test -n "$SDKMANAGER" || { echo "sdkmanager not found under $SDK_ROOT"; exit 1; }
-          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses || true
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install \
+          test -n "$SDKMANAGER" || {
+            echo "sdkmanager not found under $SDK_ROOT"
+            exit 1
+          }
+
+          echo "Accepting SDK licenses using channel 3..."
+          set +o pipefail
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --channel=3 --licenses
+          LICENSE_STATUS=${PIPESTATUS[1]}
+          set -o pipefail
+          test "$LICENSE_STATUS" -eq 0 || {
+            echo "SDK license acceptance failed: $LICENSE_STATUS"
+            exit 1
+          }
+
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --channel=3 --install \
             "platform-tools" \
             "platforms;android-37" \
             "build-tools;37.0.0" \
             "ndk;29.0.14206865" \
             "cmake;3.31.6"
-          python3 --version
 
       - name: Prepare ARMSX2 source and shader dependencies
         run: |
